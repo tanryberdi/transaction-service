@@ -1,6 +1,10 @@
 package entities
 
-import "github.com/shopspring/decimal"
+import (
+	"time"
+
+	"github.com/shopspring/decimal"
+)
 
 type SourceType string
 
@@ -12,13 +16,13 @@ type User struct {
 
 // Transaction represents a transaction in the system
 type Transaction struct {
-	ID            uint64          `json:"id" db:"id"`
-	UserID        uint64          `json:"userId" db:"user_id"`
-	TransactionID string          `json:"transactionId" db:"transaction_id"`
-	State         string          `json:"state" db:"state"`
-	Amount        decimal.Decimal `json:"amount" db:"amount"`
-	SourceType    SourceType      `json:"sourceType" db:"source_type"`
-	CreatedAt     string          `json:"createdAt" db:"created_at"`
+	ID            uint64           `json:"id" db:"id"`
+	UserID        uint64           `json:"userId" db:"user_id"`
+	TransactionID string           `json:"transactionId" db:"transaction_id"`
+	State         TransactionState `json:"state" db:"state"`
+	Amount        decimal.Decimal  `json:"amount" db:"amount"`
+	SourceType    SourceType       `json:"sourceType" db:"source_type"`
+	CreatedAt     time.Time        `json:"createdAt" db:"created_at"`
 }
 
 // TransactionState represents the state of a transaction
