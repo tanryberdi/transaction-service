@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: transaction_postgres
+    environment:
+      POSTGRES_USER: tanryberdi
+      POSTGRES_PASSWORD: tanryberdi
+      POSTGRES_DB: transaction
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tanryberdi -d transaction"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    container_name: transaction_app
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: tanryberdi
+      DB_PASSWORD: tanryberdi
+      DB_NAME: transaction
+      DB_SSLMODE: disable
+      PORT: 8080
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
